@@ -41,12 +41,12 @@ func (mysql *MySQL) InitPool(config MySQLConfig) bool {
     db.SetMaxOpenConns(config.PoolSize)
     db.SetMaxIdleConns(config.PoolSize)
 
-    idle, err := time.ParseDuration(config.IdleTime)
-    if err == nil {
-        db.SetConnMaxIdleTime(idle)
-    } else if config.IdleTime != "" {
-        utils.LogWarn("mysql配置节中空闲时长字段idle的配置值可能有误")
-    }
+    //idle, err := time.ParseDuration(config.IdleTime)
+    //if err == nil {
+    //    db.SetConnMaxIdleTime(idle)
+    //} else if config.IdleTime != "" {
+    //    utils.LogWarn("mysql配置节中空闲时长字段idle的配置值可能有误")
+    //}
 
     life, err := time.ParseDuration(config.LifeTime)
     if err == nil {
