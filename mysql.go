@@ -56,6 +56,7 @@ func (mysql *MySQL) InitPool(config MySQLConfig) bool {
     }
 
     mysql.db = db
+    dataSource = strings.ReplaceAll(dataSource, config.Pwd, "***")
     utils.LogInfo("初始化连接池成功. 容量: %d / %d, DBSource: %s", db.Stats().OpenConnections, db.Stats().MaxOpenConnections, dataSource)
 
     return true
