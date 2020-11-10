@@ -34,6 +34,10 @@ var (
 
     unix    *nnet.UnixUDP = nil
     tcp     *nnet.TCPServer = nil
+
+    keyLock *KeyLock
+    mysqlClient *MySQL
+    redisClient IRedis
 )
 
 func usage() {
@@ -146,6 +150,17 @@ func main() {
         }
     }
 
+    keyLock = CreateKeyLock(globalConfig.LockLifeTime)
+    mysqlClient = new(MySQL)
+    mysqlClient.InitPool(globalConfig.MySQL)
+
+    if !globalConfig.LocalRedisInstance {
+        redisClient = new(Redis)
+    } else {
+        redisClient = new(LocalFastRedis)
+    }
+    redisClient.InitPool(globalConfig.Redis)
+
     messages.GlobalDispatcher.MessageObjectMapped(messages.ProtocolSchemeS2S, messages.ProtocolTagStorage, StorageMessageObject{})
     messages.GlobalDispatcher.Dispatch()
 
@@ -163,6 +178,10 @@ func main() {
 
     tcp = nnet.CreateTCPServer()
     tcp.OnDataDecoded = messages.GlobalMessageQueue.Push
+    tcp.OnWelcome = func(controller nnet.Controller) error {
+        utils.LogInfo("new client come. %s", controller.GetSource())
+        return nil
+    }
     err = tcp.Bind(globalConfig.TCPAddress, 0)
     if err != nil {
         utils.LogError("!!! 无法在地址 %s 上开启监听", globalConfig.TCPAddress, err)
@@ -171,6 +190,7 @@ func main() {
         return
     }
 
+    tcp.Schedule()
 
     env.Schedule()
 

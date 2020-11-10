@@ -8,12 +8,16 @@ type MySQLConfig struct {
     PoolSize int `json:"pool"`
     IdleTime string `json:"idle"`
     LifeTime string `json:"life"`
+    Encoding string `json:"encoding,omitempty"`
 }
 
 type RedisConfig struct {
     Addr string `json:"addr"`
-    PoolSize int `json:"pool"`
-    IdleTime int `json:"idle"`
+    Pwd string `json:"pwd,omitempty"`
+    Idle int `json:"maxIdle"`
+    Active int `json:"maxActive"`
+    IdleTime string `json:"idle"`
+    LifeTime string `json:"life"`
 }
 
 type Config struct {
@@ -21,8 +25,10 @@ type Config struct {
     Redis RedisConfig   `json:"redis"`
     TCPAddress string   `json:"tcpAddr"`
     UnixAddress string  `json:"unixAddr"`
+    LockLifeTime string `json:"lockLifeTime"`
     PIDFile string      `json:"pidFile,omitempty"`
     LogLevel int        `json:"logLevel,omitempty"`
     LogDir string       `json:"logDir,omitempty"`
     PProfAddress string `json:"pprof,omitempty"`
+    LocalRedisInstance bool `json:"localRedisInstance"`
 }
