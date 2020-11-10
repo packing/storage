@@ -93,7 +93,7 @@ func main() {
 
     logDir = globalConfig.LogDir
     if logDir == "" {
-        logDir = "/dev/null"
+        logDir = "./logs/storage"
     }
     logLevel = globalConfig.LogLevel
     if !daemon {
