@@ -96,21 +96,7 @@ func(r *Redis) Do(cmd string, args ...interface{}) (interface{}, error) {
     c := r.pool.Get()
     defer c.Close()
 
-    switch strings.ToLower(cmd) {
-    case "set":
-        if len(args) > 1 {
-            args[1] = r.packData(args[1])
-        }
-    }
-
     ret, err := c.Do(cmd, args...)
-
-    switch strings.ToLower(cmd) {
-    case "get":
-        if ret != nil {
-            ret = r.unPackData(ret)
-        }
-    }
 
     return ret, err
 }
@@ -144,6 +130,10 @@ func(r *Redis) unPackData(v interface{}) interface{} {
         return nil
     }
 
+    if b[0] == 0 {
+        return string(b[1:])
+    }
+
     err, data, _ := codecs.CodecIMv2.Decoder.Decode(b)
     if err == nil {
         return data
@@ -152,6 +142,11 @@ func(r *Redis) unPackData(v interface{}) interface{} {
 }
 
 func(r *Redis) packData(v interface{}) string {
+    s, ok := v.(string)
+    if ok {
+        bs := []byte(s)
+        return string(append([]byte{0}, bs...))
+    }
     err, data := codecs.CodecIMv2.Encoder.Encode(&v)
     if err == nil {
         return string(data)

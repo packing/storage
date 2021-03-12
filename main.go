@@ -52,6 +52,7 @@ Options:
 
 
 func main() {
+    //runtime.GOMAXPROCS(2)
 
     flag.BoolVar(&help, "h", false, "help message")
     flag.BoolVar(&version, "v", false, "print version")
