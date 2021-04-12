@@ -6,8 +6,8 @@ import (
     "time"
 
     "github.com/garyburd/redigo/redis"
-    "github.com/packing/nbpy/codecs"
-    "github.com/packing/nbpy/utils"
+    "github.com/packing/clove/codecs"
+    "github.com/packing/clove/utils"
 )
 
 type IRedis interface {

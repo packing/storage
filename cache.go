@@ -2,27 +2,27 @@ package main
 
 import (
     "fmt"
-    "github.com/packing/nbpy/utils"
     "math/rand"
     "strconv"
     "strings"
     "sync"
     "time"
 
+    "github.com/packing/clove/utils"
+
     set "github.com/deckarep/golang-set"
 
-    "github.com/packing/nbpy/bits"
-    "github.com/packing/nbpy/codecs"
-    "github.com/packing/nbpy/errors"
-
+    "github.com/packing/clove/bits"
+    "github.com/packing/clove/codecs"
+    "github.com/packing/clove/errors"
 )
 
 //goland:noinspection ALL
 const (
     REDIS_TYPE_STANDARD = 0
-    REDIS_TYPE_MAP = 1
-    REDIS_TYPE_LIST = 2
-    REDIS_TYPE_SET = 3
+    REDIS_TYPE_MAP      = 1
+    REDIS_TYPE_LIST     = 2
+    REDIS_TYPE_SET      = 3
 )
 
 type RedisDataType uint8
@@ -96,7 +96,6 @@ const (
 var ErrorArgsLength = errors.Errorf("parameter number mismatch")
 var ErrorKeyNotFound = errors.Errorf("the specified key does not exist")
 var ErrorTypeNotMatch = errors.Errorf("the data type of the specified key do not match")
-
 
 type SetData struct {
     data   set.Set
@@ -198,32 +197,32 @@ func (s *StandardData) Incr(add int64) {
     }
 }
 
-func (s *StandardData) AppendValue(interface{})                             {}
-func (s *StandardData) RemoveMutil(...interface{}) int                      { return -1 }
-func (s *StandardData) PeekValues(int) []interface{}                        { return [] interface{}{} }
-func (s *StandardData) Contains(interface{}) bool                           { return false }
-func (s *StandardData) BuildSet(...interface{})                             {}
-func (s *StandardData) GetSrcData() interface{}                             { return s.data }
-func (s *StandardData) Inter(...IPoolData) []interface{}                    { return [] interface{}{} }
-func (s *StandardData) Diff(...IPoolData) []interface{}                     { return [] interface{}{} }
-func (s *StandardData) Union(...IPoolData) []interface{}                    { return [] interface{}{} }
-func (s *StandardData) Add(interface{}) bool                                { return false }
-func (s *StandardData) Remove(interface{}) bool                             { return false }
-func (s *StandardData) Slice(int, int)                                      {}
-func (s *StandardData) InsertValueByValue(int, interface{}, interface{})    {}
-func (s *StandardData) PopValueByValue(int, interface{}) int                { return -1 }
-func (s *StandardData) InsertValue(int, interface{})                        {}
-func (s *StandardData) PopValue(int) interface{}                            { return nil }
-func (s *StandardData) PopValues(int) []interface{}                         { return [] interface{}{} }
-func (s *StandardData) SetKeyValue(interface{}, interface{})                {}
-func (s *StandardData) SetIndexValue(int, interface{})                      {}
-func (s *StandardData) GetKeyValue(interface{}) interface{}                 { return nil }
-func (s *StandardData) GetIndexValue(int) interface{}                       { return nil }
-func (s *StandardData) GetLength() int                                      { return -1 }
-func (s *StandardData) HasKey(interface{}) bool                             { return false }
-func (s *StandardData) DelKey(interface{}) bool                             { return false }
-func (s *StandardData) GetKeys() []interface{}                              { return nil }
-func (s *StandardData) GetValues() []interface{}                            { return nil }
+func (s *StandardData) AppendValue(interface{})                          {}
+func (s *StandardData) RemoveMutil(...interface{}) int                   { return -1 }
+func (s *StandardData) PeekValues(int) []interface{}                     { return []interface{}{} }
+func (s *StandardData) Contains(interface{}) bool                        { return false }
+func (s *StandardData) BuildSet(...interface{})                          {}
+func (s *StandardData) GetSrcData() interface{}                          { return s.data }
+func (s *StandardData) Inter(...IPoolData) []interface{}                 { return []interface{}{} }
+func (s *StandardData) Diff(...IPoolData) []interface{}                  { return []interface{}{} }
+func (s *StandardData) Union(...IPoolData) []interface{}                 { return []interface{}{} }
+func (s *StandardData) Add(interface{}) bool                             { return false }
+func (s *StandardData) Remove(interface{}) bool                          { return false }
+func (s *StandardData) Slice(int, int)                                   {}
+func (s *StandardData) InsertValueByValue(int, interface{}, interface{}) {}
+func (s *StandardData) PopValueByValue(int, interface{}) int             { return -1 }
+func (s *StandardData) InsertValue(int, interface{})                     {}
+func (s *StandardData) PopValue(int) interface{}                         { return nil }
+func (s *StandardData) PopValues(int) []interface{}                      { return []interface{}{} }
+func (s *StandardData) SetKeyValue(interface{}, interface{})             {}
+func (s *StandardData) SetIndexValue(int, interface{})                   {}
+func (s *StandardData) GetKeyValue(interface{}) interface{}              { return nil }
+func (s *StandardData) GetIndexValue(int) interface{}                    { return nil }
+func (s *StandardData) GetLength() int                                   { return -1 }
+func (s *StandardData) HasKey(interface{}) bool                          { return false }
+func (s *StandardData) DelKey(interface{}) bool                          { return false }
+func (s *StandardData) GetKeys() []interface{}                           { return nil }
+func (s *StandardData) GetValues() []interface{}                         { return nil }
 
 type MapData struct {
     data   *sync.Map
@@ -302,31 +301,31 @@ func (s *MapData) GetValues() []interface{} {
     return ks
 }
 
-func (s *MapData) AppendValue(interface{})                             {}
-func (s *MapData) RemoveMutil(...interface{}) int                      { return -1 }
-func (s *MapData) PeekValues(int) []interface{}                        { return [] interface{}{} }
-func (s *MapData) Contains(k interface{}) bool                          { return s.HasKey(k) }
-func (s *MapData) Incr(int64)                                           {}
-func (s *MapData) BuildSet(...interface{})                              {}
-func (s *MapData) GetSrcData() interface{}                              { return s.data }
-func (s *MapData) Union(...IPoolData) []interface{}                     { return [] interface{}{} }
-func (s *MapData) Inter(...IPoolData) []interface{}                     { return [] interface{}{} }
-func (s *MapData) Diff(...IPoolData) []interface{}                      { return [] interface{}{} }
-func (s *MapData) Add(interface{}) bool                                 { return false }
-func (s *MapData) Remove(interface{}) bool                              { return false }
-func (s *MapData) InsertValueByValue(int, interface{}, interface{})     {}
-func (s *MapData) PopValueByValue(int, interface{}) int                 { return 0 }
-func (s *MapData) Slice(int, int)                                       {}
-func (s *MapData) InsertValue(int, interface{})                         {}
-func (s *MapData) PopValue(int) interface{}                             { return nil }
-func (s *MapData) PopValues(int) []interface{}                          { return [] interface{}{} }
-func (s *MapData) SetValue(interface{})                                 {}
-func (s *MapData) SetIndexValue(int, interface{})                       {}
-func (s *MapData) GetValue() interface{}                                { return nil }
-func (s *MapData) GetIndexValue(int) interface{}                        { return nil }
+func (s *MapData) AppendValue(interface{})                          {}
+func (s *MapData) RemoveMutil(...interface{}) int                   { return -1 }
+func (s *MapData) PeekValues(int) []interface{}                     { return []interface{}{} }
+func (s *MapData) Contains(k interface{}) bool                      { return s.HasKey(k) }
+func (s *MapData) Incr(int64)                                       {}
+func (s *MapData) BuildSet(...interface{})                          {}
+func (s *MapData) GetSrcData() interface{}                          { return s.data }
+func (s *MapData) Union(...IPoolData) []interface{}                 { return []interface{}{} }
+func (s *MapData) Inter(...IPoolData) []interface{}                 { return []interface{}{} }
+func (s *MapData) Diff(...IPoolData) []interface{}                  { return []interface{}{} }
+func (s *MapData) Add(interface{}) bool                             { return false }
+func (s *MapData) Remove(interface{}) bool                          { return false }
+func (s *MapData) InsertValueByValue(int, interface{}, interface{}) {}
+func (s *MapData) PopValueByValue(int, interface{}) int             { return 0 }
+func (s *MapData) Slice(int, int)                                   {}
+func (s *MapData) InsertValue(int, interface{})                     {}
+func (s *MapData) PopValue(int) interface{}                         { return nil }
+func (s *MapData) PopValues(int) []interface{}                      { return []interface{}{} }
+func (s *MapData) SetValue(interface{})                             {}
+func (s *MapData) SetIndexValue(int, interface{})                   {}
+func (s *MapData) GetValue() interface{}                            { return nil }
+func (s *MapData) GetIndexValue(int) interface{}                    { return nil }
 
 type ListData struct {
-    data   [] interface{}
+    data   []interface{}
     expire int64
     mutex  sync.Mutex
     sync.Cond
@@ -334,7 +333,7 @@ type ListData struct {
 
 func (s *ListData) check() {
     if s.data == nil {
-        s.data = make([] interface{}, 0)
+        s.data = make([]interface{}, 0)
     }
 }
 
@@ -394,7 +393,7 @@ func (s *ListData) PopValue(at int) interface{} {
     if at < len(s.data) {
         ret = s.data[at]
         l1 := s.data[:at]
-        l2 := s.data[at + 1:]
+        l2 := s.data[at+1:]
         s.data = append(l1, l2...)
     }
     return ret
@@ -466,7 +465,7 @@ func (s *ListData) PopValueByValue(count int, tv interface{}) int {
         if countAbs <= c {
             break
         }
-        for i := 0; i < len(s.data); i ++ {
+        for i := 0; i < len(s.data); i++ {
             index := i
             if count < 0 {
                 index = len(s.data) + index
@@ -481,7 +480,7 @@ func (s *ListData) PopValueByValue(count int, tv interface{}) int {
             s.PopValue(at)
             c += 1
         } else {
-           break
+            break
         }
     }
     return c
@@ -494,26 +493,25 @@ func (s *ListData) AppendValue(v interface{}) {
     s.data = append(s.data, v)
 }
 
-func (s *ListData) RemoveMutil(...interface{}) int                      { return -1 }
-func (s *ListData) PeekValues(int) []interface{}                        { return [] interface{}{} }
-func (s *ListData) PopValues(int) []interface{}                         { return [] interface{}{} }
-func (s *ListData) Contains(interface{}) bool                           { return false }
-func (s *ListData) Incr(int64)                                          {}
-func (s *ListData) BuildSet(...interface{})                             {}
-func (s *ListData) GetSrcData() interface{}                             { return s.data }
-func (s *ListData) Union(...IPoolData) []interface{}                    { return [] interface{}{} }
-func (s *ListData) Inter(...IPoolData) []interface{}                    { return [] interface{}{} }
-func (s *ListData) Diff(...IPoolData) []interface{}                     { return [] interface{}{} }
-func (s *ListData) Add(interface{}) bool                                { return false }
-func (s *ListData) Remove(interface{}) bool                             { return false }
-func (s *ListData) SetValue(interface{})                            {}
-func (s *ListData) SetKeyValue(key interface{}, val interface{})    {}
-func (s *ListData) GetValue() interface{}                           { return nil }
-func (s *ListData) GetKeyValue(key interface{}) interface{}         { return nil }
-func (s *ListData) HasKey(interface{}) bool                         { return false }
-func (s *ListData) DelKey(interface{}) bool                         { return false }
-func (s *ListData) GetKeys() []interface{}                          { return nil }
-
+func (s *ListData) RemoveMutil(...interface{}) int               { return -1 }
+func (s *ListData) PeekValues(int) []interface{}                 { return []interface{}{} }
+func (s *ListData) PopValues(int) []interface{}                  { return []interface{}{} }
+func (s *ListData) Contains(interface{}) bool                    { return false }
+func (s *ListData) Incr(int64)                                   {}
+func (s *ListData) BuildSet(...interface{})                      {}
+func (s *ListData) GetSrcData() interface{}                      { return s.data }
+func (s *ListData) Union(...IPoolData) []interface{}             { return []interface{}{} }
+func (s *ListData) Inter(...IPoolData) []interface{}             { return []interface{}{} }
+func (s *ListData) Diff(...IPoolData) []interface{}              { return []interface{}{} }
+func (s *ListData) Add(interface{}) bool                         { return false }
+func (s *ListData) Remove(interface{}) bool                      { return false }
+func (s *ListData) SetValue(interface{})                         {}
+func (s *ListData) SetKeyValue(key interface{}, val interface{}) {}
+func (s *ListData) GetValue() interface{}                        { return nil }
+func (s *ListData) GetKeyValue(key interface{}) interface{}      { return nil }
+func (s *ListData) HasKey(interface{}) bool                      { return false }
+func (s *ListData) DelKey(interface{}) bool                      { return false }
+func (s *ListData) GetKeys() []interface{}                       { return nil }
 
 func (s *SetData) check() {
     if s.data == nil {
@@ -604,11 +602,11 @@ func (s *SetData) GetValues() []interface{} {
 func (s *SetData) PopValues(count int) []interface{} {
     s.check()
     var ret = make([]interface{}, 0)
-    for i := 0; i < count; i ++ {
+    for i := 0; i < count; i++ {
         if s.data.Cardinality() == 0 {
             break
         }
-        ret = append(ret,s.data.Pop())
+        ret = append(ret, s.data.Pop())
     }
     return ret
 }
@@ -627,7 +625,7 @@ func (s *SetData) PeekValues(count int) []interface{} {
         return l[:limit]
     } else {
         var tl = make([]interface{}, 0)
-        for i := 0; i < bits.AbsForInt32(limit); i ++ {
+        for i := 0; i < bits.AbsForInt32(limit); i++ {
             if i >= len(l) {
                 break
             }
@@ -651,23 +649,23 @@ func (s *SetData) RemoveMutil(vs ...interface{}) int {
     return c
 }
 
-func (s *SetData) AppendValue(interface{})                             {}
-func (s *SetData) Incr(int64)                                          {}
-func (s *SetData) GetSrcData() interface{}                             { return s.data }
-func (s *SetData) SetValue(interface{})                                {}
-func (s *SetData) GetValue() interface{}                               { return nil }
-func (s *SetData) Slice(int, int)                                      {}
-func (s *SetData) InsertValueByValue(int, interface{}, interface{})    {}
-func (s *SetData) InsertValue(int, interface{})                        {}
-func (s *SetData) PopValue(int) interface{}                            { return nil }
-func (s *SetData) PopValueByValue(int, interface{}) int            { return -1 }
-func (s *SetData) SetKeyValue(interface{}, interface{})                {}
-func (s *SetData) SetIndexValue(int, interface{})                      {}
-func (s *SetData) GetKeyValue(interface{}) interface{}                 { return nil }
-func (s *SetData) GetIndexValue(int) interface{}                       { return nil }
-func (s *SetData) HasKey(interface{}) bool                             { return false }
-func (s *SetData) DelKey(interface{}) bool                             { return false }
-func (s *SetData) GetKeys() []interface{}                              { return nil }
+func (s *SetData) AppendValue(interface{})                          {}
+func (s *SetData) Incr(int64)                                       {}
+func (s *SetData) GetSrcData() interface{}                          { return s.data }
+func (s *SetData) SetValue(interface{})                             {}
+func (s *SetData) GetValue() interface{}                            { return nil }
+func (s *SetData) Slice(int, int)                                   {}
+func (s *SetData) InsertValueByValue(int, interface{}, interface{}) {}
+func (s *SetData) InsertValue(int, interface{})                     {}
+func (s *SetData) PopValue(int) interface{}                         { return nil }
+func (s *SetData) PopValueByValue(int, interface{}) int             { return -1 }
+func (s *SetData) SetKeyValue(interface{}, interface{})             {}
+func (s *SetData) SetIndexValue(int, interface{})                   {}
+func (s *SetData) GetKeyValue(interface{}) interface{}              { return nil }
+func (s *SetData) GetIndexValue(int) interface{}                    { return nil }
+func (s *SetData) HasKey(interface{}) bool                          { return false }
+func (s *SetData) DelKey(interface{}) bool                          { return false }
+func (s *SetData) GetKeys() []interface{}                           { return nil }
 
 /////////////////////////////////////////////////////
 
@@ -756,7 +754,7 @@ func (r *LocalFastRedis) Do(cmd string, args ...interface{}) (interface{}, error
             r.setData(args[0], args[2])
             ex := tryParseInt64(args[1])
             if ex > 0 {
-                r.setLifeCycle(args[0], time.Now().UnixNano() + ex)
+                r.setLifeCycle(args[0], time.Now().UnixNano()+ex)
             }
             return "OK", nil
         } else {
@@ -797,7 +795,7 @@ func (r *LocalFastRedis) Do(cmd string, args ...interface{}) (interface{}, error
         }
     case REDIS_COMMAND_DECRBY:
         if len(args) == 2 {
-            return r.incrData(args[0], 0 - tryParseInt64(args[1]))
+            return r.incrData(args[0], 0-tryParseInt64(args[1]))
         } else {
             return 0, ErrorArgsLength
         }
@@ -841,9 +839,9 @@ func (r *LocalFastRedis) Do(cmd string, args ...interface{}) (interface{}, error
             return ret, ErrorArgsLength
         }
     case REDIS_COMMAND_MSET:
-        if len(args) >= 2 && len(args) % 2 == 0 {
-            for i := 0; i < len(args) / 2; i ++ {
-                k, v := args[i * 2], args[i * 2 + 1]
+        if len(args) >= 2 && len(args)%2 == 0 {
+            for i := 0; i < len(args)/2; i++ {
+                k, v := args[i*2], args[i*2+1]
                 r.setData(k, v)
             }
             return "OK", nil
@@ -955,9 +953,9 @@ func (r *LocalFastRedis) Do(cmd string, args ...interface{}) (interface{}, error
             return nil, ErrorArgsLength
         }
     case REDIS_COMMAND_HMSET:
-        if len(args) >= 3 && len(args) % 2 == 1 {
-            for i := 0; i < (len(args) - 1) / 2; i ++ {
-                k, v := args[i * 2 + 1], args[i * 2 + 2]
+        if len(args) >= 3 && len(args)%2 == 1 {
+            for i := 0; i < (len(args)-1)/2; i++ {
+                k, v := args[i*2+1], args[i*2+2]
                 r.setMapData(args[0], k, v)
             }
             return "OK", nil
@@ -1278,7 +1276,7 @@ func (r *LocalFastRedis) Do(cmd string, args ...interface{}) (interface{}, error
             c := 0
             mt := r.getData(args[0])
             if mt != nil {
-               c = mt.GetLength()
+                c = mt.GetLength()
             }
             return c, nil
         } else {

@@ -10,12 +10,12 @@ import (
     "os"
     "syscall"
 
-    "github.com/packing/nbpy/codecs"
-    "github.com/packing/nbpy/env"
-    "github.com/packing/nbpy/messages"
-    "github.com/packing/nbpy/nnet"
-    "github.com/packing/nbpy/packets"
-    "github.com/packing/nbpy/utils"
+    "github.com/packing/clove/codecs"
+    "github.com/packing/clove/env"
+    "github.com/packing/clove/messages"
+    "github.com/packing/clove/nnet"
+    "github.com/packing/clove/packets"
+    "github.com/packing/clove/utils"
     "github.com/sipt/GoJsoner"
 )
 
@@ -24,7 +24,6 @@ var (
     version bool
 
     daemon   bool
-    setsided bool
 
     configfile = "./storage.conf"
 
@@ -57,7 +56,6 @@ func main() {
     flag.BoolVar(&help, "h", false, "help message")
     flag.BoolVar(&version, "v", false, "print version")
     flag.BoolVar(&daemon, "d", false, "run at daemon")
-    flag.BoolVar(&setsided, "s", false, "already run at daemon")
     flag.StringVar(&configfile, "f", "./storage.conf", "config file")
     flag.Usage = usage
 
@@ -96,11 +94,12 @@ func main() {
     if logDir == "" {
         logDir = "./logs/storage"
     }
+
     logLevel = globalConfig.LogLevel
     if !daemon {
         logDir = ""
     } else {
-        if !setsided {
+        if os.Getppid() != 1 {
             utils.Daemon()
             return
         }

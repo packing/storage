@@ -7,7 +7,7 @@ import (
     "time"
 
     _ "github.com/go-sql-driver/mysql"
-    "github.com/packing/nbpy/utils"
+    "github.com/packing/clove/utils"
 )
 
 const (
