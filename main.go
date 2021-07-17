@@ -165,7 +165,7 @@ func main() {
     messages.GlobalDispatcher.Dispatch()
 
     //初始化unixsocket发送管道
-    unix = nnet.CreateUnixUDPWithFormat(packets.PacketFormatNB, codecs.CodecIMv2)
+    unix = nnet.CreateUnixUDPWithFormatAndBufferSize(packets.PacketFormatNB, codecs.CodecIMv2, 5242880, 5242880)
     unix.OnDataDecoded = messages.GlobalMessageQueue.Push
     err = unix.Bind(globalConfig.UnixAddress)
     if err != nil {
